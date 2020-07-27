@@ -1,0 +1,16 @@
+FROM ubuntu:20.04
+
+RUN apt-get update \
+    && apt-get install -y wget unzip
+
+RUN useradd --create-home appuser
+WORKDIR /home/appuser
+USER appuser
+
+RUN wget https://github.com/fireeye/capa/releases/download/v1.0.0/capa-v1.0.0-linux.zip \
+    && unzip -d /home/appuser capa-v1.0.0-linux.zip \
+    && rm capa-v1.0.0-linux.zip
+
+WORKDIR /malware
+ENTRYPOINT [ "/home/appuser/capa-v1.0.0-linux" ]
+CMD [ "-h" ]
